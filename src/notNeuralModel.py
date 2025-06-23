@@ -3,16 +3,7 @@ import matplotlib.pyplot as plt
 from xgboost import XGBRegressor
 
 
-def create_dataset(dataset, look_back):
-    X, Y = [], []
-    for i in range(len(dataset) - look_back):
-        X.append(dataset[i:i + look_back])
-        Y.append(dataset[i + look_back])
-    return np.array(X), np.array(Y)
-
-
-def train_xgb_model(train, look_back, n_forecast):
-    X, y = create_dataset(train, look_back)
+def train_xgb_model(X, y,  n_forecast):
     x_train, _ = X[:-n_forecast], X[-n_forecast:]
     y_train, y_test = y[:-n_forecast], y[-n_forecast:]
 

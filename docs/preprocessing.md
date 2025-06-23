@@ -5,7 +5,7 @@
 Spiegazione generale del concetto di preprocessing nei modelli predittivi e nel contesto di Operational Analytics.
 
 ## Preprocessing nel Progetto
-![dataset.png](dataset.png)
+![dataset.png](img/dataset.png)
 
 Il grafico mostra una certa quantità di rumore, ovvero variazioni casuali o irregolari nei dati di pioggia settimanale.
 Questo è particolarmente evidente nei seguenti aspetti:
