@@ -24,7 +24,7 @@ Ogni nuovo albero corregge gli errori residui commessi dai precedenti, miglioran
 - Resistente al rumore nei dati e adatto a problemi di regressione.
 
 ### Approccio utilizzato:
-- Finestra mobile (`look_back = 52`): ogni istanza di training contiene 52 settimane di dati storici,
+- Finestra mobile (`look_back = 104`): ogni istanza di training contiene 52 settimane di dati storici,
 - **Forecast ricorsivo**: il modello utilizza la sua ultima previsione come input per la successiva, 
 per predire tutte le 52 settimane.
 
@@ -60,20 +60,20 @@ print(forecast_accuracy(forecast, test))
 ### Metriche di accuratezza 
 
 | Metrica   | Valore |
-| --------- | ------ |
-| MAPE (%)  | 2.94   |
-| MAE (mm)  | 10.60  |
-| RMSE (mm) | 13.54  |
-| Corr      | 0.18   |
-| ME        | 1.91   |
-| MPE (%)   | 2.53   |
+| --------- |--------|
+| MAPE (%)  | 2.42   |
+| MAE (mm)  | 8.83   |
+| RMSE (mm) | 11.8   |
+| Corr      | 0.35   |
+| ME        | 2.55   |
+| MPE (%)   | 2.16   |
 
 **Interpretazione**:
 - Il MAPE è leggermente superiore rispetto a SARIMAX e RNN, suggerendo minore precisione relativa.
 
 - RMSE e MAE sono i più alti tra i tre modelli analizzati.
 
-- La correlazione di 0.18 segnala una bassa capacità del modello di seguire l’andamento temporale dei dati, 
+- La correlazione di 0.20 segnala una bassa capacità del modello di seguire l’andamento temporale dei dati, 
 anche se la struttura degli errori è relativamente bilanciata.
 
 ### Conclusione

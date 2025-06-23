@@ -2,6 +2,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 
 
+
 # Accuracy metrics
 def forecast_accuracy(forecast, actual):
     mape = np.mean(np.abs(forecast - actual) / np.where(actual == 0, 1, np.abs(actual)))

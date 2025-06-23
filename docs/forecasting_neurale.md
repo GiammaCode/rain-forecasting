@@ -38,7 +38,7 @@ A partire dalle ultime 52 settimane del set di addestramento, il modello genera 
 anno successivo (52 settimane).
 
 ### Codice di Implementazione (estratto)
-```python
+```
 class NeuralForecaster(nn.Module):
     def __init__(self, input_size=52):
         super(NeuralForecaster, self).__init__()
@@ -76,21 +76,23 @@ def plot_results(forecast, test):
 ### Metriche di Accuratezza
 
 | Metrica   | Valore |
-| --------- | ------ |
-| MAPE (%)  | 2.31   |
-| MAE (mm)  | 10.25  |
-| RMSE (mm) | 12.98  |
-| Corr      | 0.17   |
-| ME        | 0.88   |
-| MPE (%)   | 1.94   |
+| --------- |--------|
+| MAPE (%)  | 1.90   |
+| MAE (mm)  | 8.98   |
+| RMSE (mm) | 11.92  |
+| Corr      | 0.30   |
+| ME        | -0.89  |
+| MPE (%)   | 1.46   |
 
 
 **Interpretazione**:
-- Il modello presenta un MAPE contenuto, ma inferiore rispetto al modello SARIMAX.
+- Il modello presenta un MAPE contenuto, ma superiore rispetto al modello SARIMAX.
 
 - L'RMSE è leggermente più alto rispetto al modello statistico.
 
-- La correlazione di soli 0.17 indica che il modello neurale ha appreso solo parzialmente le dinamiche temporali della serie, suggerendo potenziali margini di miglioramento (es. aumento dati, tuning iperparametri, reti ricorrenti o convoluzionali).
+- La correlazione 0.30 indica che il modello neurale ha appreso solo parzialmente le dinamiche temporali 
+della serie, suggerendo potenziali margini di miglioramento (es. aumento dati, tuning iperparametri, reti ricorrenti 
+o convoluzionali).
 
 ### Conclusione
 La rete neurale sviluppata ha mostrato una buona capacità di previsione in termini di errore assoluto, 
