@@ -35,10 +35,10 @@ Le statistiche ottenute sono:
 | Statistica           | Valore   |
 |----------------------|----------|
 | **Min**              | 0.00 mm  |
-| **Max**              | 55.79 mm |
-| **Media (Mean)**     | 17.29 mm |
-| **Mediana (Median)** | 16.91 mm |
-| **Dev. Standard**    | 11.73 mm |
+| **Max**              | 65.53 mm |
+| **Media (Mean)**     | 17.45 mm |
+| **Mediana (Median)** | 17.34 mm |
+| **Dev. Standard**    | 11.81 mm |
 
 ---
 
@@ -56,8 +56,8 @@ Per l’analisi di serie temporali, è fondamentale verificare se la serie è **
 ### Test di Dickey-Fuller Aumentato (ADF)
 
 ```text
-ADF stats: -5.7437
-P-value: 6.19e-07
+ADF stats: -8.82
+P-value: 1.79e-14
 ```
 
 ### Conclusione:

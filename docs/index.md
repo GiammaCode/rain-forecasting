@@ -61,7 +61,6 @@ I dati sono stati aggregati su base settimanale e pre-processati per garantire c
 
 Per ogni modello:
 
-- I dati vengono strutturati secondo una finestra mobile (`look_back = 52`) per catturare la stagionalità annuale.
 - Le previsioni vengono prodotte **in modo ricorsivo**, settimana dopo settimana, per simulare un utilizzo in tempo reale.
 - Le performance sono valutate con metriche classiche di regressione:
   - **MAE** (Errore Assoluto Medio),

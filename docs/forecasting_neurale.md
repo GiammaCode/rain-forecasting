@@ -1,6 +1,6 @@
 ---
 layout: default
-title: NN-model
+title: RNN
 nav_order: 4
 ---
 # Previsione di Pioggia Settimanale - Rete Neurale (2024)
@@ -37,35 +37,6 @@ NeuralForecaster(
 A partire dalle ultime 52 settimane del set di addestramento, il modello genera previsioni passo-passo per l’intero 
 anno successivo (52 settimane).
 
-### Codice di Implementazione (estratto)
-```
-class NeuralForecaster(nn.Module):
-    def __init__(self, input_size=52):
-        super(NeuralForecaster, self).__init__()
-        self.network = nn.Sequential(
-            nn.Linear(52, 32),
-            nn.ReLU(),
-            nn.Linear(32, 16),
-            nn.ReLU(),
-            nn.Linear(16, 1)
-        )
-
-def train_model(model, X, y, lr=0.0007, n_epochs=1000, batch_size=1):
-    ...
-    # Ottimizzazione e stampa della perdita ogni 100 epoche
-    ...
-
-def recursive_forecast(model, initial_input, n_steps):
-    ...
-    # Forecasting autoregressivo
-    ...
-
-def plot_results(forecast, test):
-    ...
-    # Visualizzazione grafico
-    ...
-```
-
 ### Visualizzazione dei Risultati
 ![NNplot.png](img/NNplot.png)
 
@@ -86,18 +57,12 @@ def plot_results(forecast, test):
 
 
 **Interpretazione**:
-- Il modello presenta un MAPE contenuto, ma superiore rispetto al modello SARIMAX.
+- Il modello prevede molto bene in media: valori vicini a quelli reali (MAPE e ME molto buoni).
 
-- L'RMSE è leggermente più alto rispetto al modello statistico.
+- È ancora timido nei picchi: alcuni salti non vengono seguiti.
 
-- La correlazione 0.30 indica che il modello neurale ha appreso solo parzialmente le dinamiche temporali 
-della serie, suggerendo potenziali margini di miglioramento (es. aumento dati, tuning iperparametri, reti ricorrenti 
-o convoluzionali).
+- La correlazion di 0.30 è  segno che la rete inizia a capire l'andamento, 
+ma non lo segue ancora con decisione.
 
-### Conclusione
 La rete neurale sviluppata ha mostrato una buona capacità di previsione in termini di errore assoluto, 
 ma una correlazione temporale più debole rispetto al modello SARIMAX.
-Possibili miglioramenti futuri includono:
-- Ottimizzazione dell’architettura e dei parametri, 
-- Utilizzo di modelli più adatti alle serie temporali (es. LSTM, GRU), 
-- Data augmentation o arricchimento con variabili esogene (meteo, temperatura, etc).

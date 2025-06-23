@@ -15,13 +15,13 @@ Di seguito un confronto visivo delle previsioni:
 
 ---
 
-## 📈 Risultati Principali
+## Risultati Principali
 
-| Modello          | MAPE (%) | MAE (mm) | RMSE (mm) | Corr     |
-|------------------|----------|----------|-----------|----------|
-| **SARIMAX**      | **1.93** | 8.63     | 11.42     | **0.46** |
-| **Neural Net**   | 2.31     | 10.25    | 12.98     | 0.17     |
-| **XGBoost**      | 2.94     | 10.60    | 13.54     | 0.18     |
+| Modello          | MAPE (%) | MAE (mm) | RMSE (mm)   | Corr     |
+|------------------|----------|----------|-------------|----------|
+| **SARIMAX**      | 1.93     | **8.63** | **11.42**   | **0.46** |
+| **Neural Net**   | **1.90** | 8.98     | 11.92       | 0.30     |
+| **XGBoost**      | 2.42     | 8.83     | 11.80       | 0.35     |
 
 ### Osservazioni:
 

@@ -1,17 +1,9 @@
 ---
 layout: default
-title: stats-model
+title: SARIMAX
 nav_order: 3
 ---
 # Previsione di Pioggia Settimanale - Modello SARIMAX (2024)
-
-## Obiettivo del Progetto
-
-Questo progetto ha l'obiettivo di prevedere la quantità settimanale di pioggia in millimetri per l'anno 2024
-tramite l'uso di un modello **SARIMAX** (Seasonal AutoRegressive Integrated Moving Average with eXogenous regressors).
-La previsione si basa su dati storici e include la componente stagionale su base annuale (52 settimane).
-
----
 
 ## Teoria del Modello SARIMAX
 
@@ -47,7 +39,6 @@ import matplotlib.pyplot as plt
 def run_sarima(train, test, order=(0, 0, 0), seasonal_order=(1, 1, 0, 52)):
     model = SARIMAX(train, order=order, seasonal_order=seasonal_order)
     fit = model.fit()
-    pred_in_sample = fit.predict(0, len(train))
     forecast = fit.forecast(steps=len(test))
 
     plt.plot(test, label="actual")
@@ -90,13 +81,5 @@ Il RMSE suggerisce che l’errore assoluto medio quadratico è moderato.
 Il valore di correlazione di circa 0.46 implica una correlazione discreta tra valori previsti e osservati,
 ma indica che c'è spazio per migliorare la coerenza temporale del modello.
 
-### Conclusione
 Il modello SARIMAX applicato ha dimostrato una buona capacità di previsione delle precipitazioni settimanali, 
-specialmente nel cogliere la componente stagionale. Ulteriori miglioramenti potrebbero essere ottenuti:
-
-Ottimizzando i parametri del modello (p, d, q, ecc.),
-
-Introducendo variabili esogene (come temperatura o umidità),
-
-Applicando tecniche di ensemble learning o reti neurali ricorrenti (RNN).
-
+specialmente nel cogliere la componente stagionale.

@@ -1,6 +1,6 @@
 ---
 layout: default
-title: XGBoost-model
+title: XGBoost
 nav_order: 5
 ---
 # Previsione di Pioggia Settimanale - XGBoost (2024)
@@ -71,18 +71,8 @@ print(forecast_accuracy(forecast, test))
 **Interpretazione**:
 - Il MAPE è leggermente superiore rispetto a SARIMAX e RNN, suggerendo minore precisione relativa.
 
-- RMSE e MAE sono i più alti tra i tre modelli analizzati.
+- La correlazione di 0.35 segnala una media capacità del modello di seguire l’andamento temporale dei dati.
 
-- La correlazione di 0.20 segnala una bassa capacità del modello di seguire l’andamento temporale dei dati, 
-anche se la struttura degli errori è relativamente bilanciata.
-
-### Conclusione
 Il modello XGBoost è potente ma in questo caso mostra prestazioni inferiori rispetto al modello SARIMAX 
 e alla rete neurale, soprattutto per quanto riguarda la coerenza temporale. Tuttavia, resta utile come baseline 
 o in combinazione con altri modelli:
-
-- Potenziale di miglioramento con tuning degli iperparametri,
-
-- Possibilità di includere variabili esogene o tecniche ensemble,
-
-- Alternativa interessante per combinare capacità predittive non lineari e flessibilità.

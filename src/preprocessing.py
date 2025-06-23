@@ -8,7 +8,7 @@ from statsmodels.graphics.tsaplots import plot_acf
 def load_and_plot_csv(path):
     df = pd.read_csv(path)
     plt.figure(figsize=(12,6))
-    for col in df.columns[1:]:  # salta la colonna 'Settimana'
+    for col in df.columns[:]:
         plt.plot(df.index, df[col], label=col)
     plt.title("Pioggia Settimanale per Anno - Emilia-Romagna")
     plt.xlabel("Settimana (1-52)")
