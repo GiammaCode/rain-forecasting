@@ -3,15 +3,7 @@ layout: default
 title: XGBoost
 nav_order: 5
 ---
-# Previsione di Pioggia Settimanale - XGBoost (2024)
-
-## Obiettivo del Progetto
-
-Questo modulo utilizza un modello **XGBoost** per prevedere la quantità settimanale di pioggia nel 2024. 
-L'algoritmo di boosting è noto per la sua efficienza e precisione nella modellazione di problemi di regressione 
-anche con feature ingegnerizzate.
-
----
+# Previsione di Pioggia Settimanale - XGBoost
 
 ## Teoria del Modello XGBoost
 

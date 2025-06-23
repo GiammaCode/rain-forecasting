@@ -3,13 +3,7 @@ layout: default
 title: RNN
 nav_order: 4
 ---
-# Previsione di Pioggia Settimanale - Rete Neurale (2024)
-
-## Obiettivo del Progetto
-
-Questo progetto mira a prevedere la quantità di pioggia settimanale in millimetri per l'anno 2024 mediante una **rete neurale artificiale feedforward**. L'approccio si basa su una finestra mobile (look-back) di 52 settimane per apprendere i pattern storici delle precipitazioni.
-
----
+# Previsione di Pioggia Settimanale - Rete Neurale
 
 ## Teoria del Modello Neurale
 
