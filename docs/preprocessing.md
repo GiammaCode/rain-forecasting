@@ -6,29 +6,63 @@ nav_order: 2
 
 # Preprocessing dei Dati
 
+## Struttura dei Dati
 
-## Cos'è il Preprocessing
+I dati storici delle precipitazioni settimanali provengono da serie regionali (es. Emilia-Romagna), organizzate in formato tabellare:
 
-Spiegazione generale del concetto di preprocessing nei modelli predittivi e nel contesto di Operational Analytics.
+- **Righe**: settimane (1–52)
+- **Colonne**: anni (es. 2020, 2021, 2022, 2023, 2024)
 
-## Preprocessing nel Progetto
-![dataset.png](img/dataset.png)
+Ogni cella contiene la quantità di pioggia settimanale in **mm**.
 
-Il grafico mostra una certa quantità di rumore, ovvero variazioni casuali o irregolari nei dati di pioggia settimanale.
-Questo è particolarmente evidente nei seguenti aspetti:
+---
 
-- Variazioni settimanali brusche: I valori di pioggia cambiano repentinamente da una settimana all'altra, 
-anche di decine di millimetri. Questo è un segno tipico di rumore nei dati meteorologici.
+## Visualizzazione Dati Storici
 
-- Andamenti irregolari tra gli anni: Sebbene ci siano alcune tendenze stagionali (ad esempio, 
-maggiore pioggia in primavera e autunno), le curve dei diversi anni (2020–2024) si discostano molto tra loro,
-indicando alta variabilità.
+Per verificare coerenza, presenza di pattern stagionali e outlier, è stato prodotto un grafico multiserie per anno:
 
-- Picchi isolati: Alcuni anni mostrano picchi molto alti (es. 2023 intorno alla settimana 10)
-che potrebbero essere veri eventi estremi ma possono anche rappresentare valori anomali o picchi rumorosi.
+![Serie Storica](img/dataset.png)
 
-### Origine dei Dati
-### Pulizia e Normalizzazione
-### Feature Engineering
-### Gestione dei Valori Mancanti
-### Suddivisione Training/Test
+> Il grafico mostra andamenti simili nei diversi anni, con picchi nella stagione invernale e primaverile.
+
+---
+
+## Statistiche Descrittive
+
+I dati grezzi sono stati appiattiti in un'unica serie temporale per facilitare il training e l’analisi. 
+Le statistiche ottenute sono:
+
+| Statistica           | Valore   |
+|----------------------|----------|
+| **Min**              | 0.00 mm  |
+| **Max**              | 55.79 mm |
+| **Media (Mean)**     | 17.29 mm |
+| **Mediana (Median)** | 16.91 mm |
+| **Dev. Standard**    | 11.73 mm |
+
+---
+
+## Verifica della Stazionarietà
+
+Per l’analisi di serie temporali, è fondamentale verificare se la serie è **stazionaria** 
+(cioè se le sue proprietà statistiche non cambiano nel tempo).
+
+### Autocorrelazione (ACF)
+
+![ACF](img/acf-plot.png)
+
+> L’autocorrelazione decresce gradualmente, segno di una possibile componente stagionale o trend.
+
+### Test di Dickey-Fuller Aumentato (ADF)
+
+```text
+ADF stats: -5.7437
+P-value: 6.19e-07
+```
+
+### Conclusione:
+La serie è stazionaria secondo il test ADF (p-value < 0.05). 
+Non è stato necessario applicare differenziazione o trasformazioni logaritmiche.
+
+
+

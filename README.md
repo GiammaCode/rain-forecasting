@@ -48,7 +48,7 @@ rain-forecasting/
 
 ```bash
 # Clona il progetto
-git clone https://github.com/tuo-utente/rain-forecasting.git
+git clone https://github.com/giammaCode/rain-forecasting.git
 cd rain-forecasting
 
 # Crea un ambiente virtuale
