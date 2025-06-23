@@ -1,4 +1,10 @@
-# Operational Analytics - Forecasting delle Piogge 🌧️
+---
+layout: default
+title: homepage
+nav_order: 1
+---
+
+# Operational Analytics - Forecasting delle Piogge
 
 Benvenuti nella documentazione del progetto di Operational Analytics focalizzato sul forecasting delle piogge.  
 Questo progetto esplora diverse tecniche di previsione, dai metodi statistici classici alle reti neurali e modelli ad

@@ -1,3 +1,9 @@
+---
+layout: default
+title: XGBoost-model
+nav_order: 5
+---
+
 # Forecasting con Modelli ad Albero Decisionale
 
 ## Introduzione ai Modelli ad Albero

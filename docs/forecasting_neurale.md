@@ -1,3 +1,8 @@
+---
+layout: default
+title: NN-model
+nav_order: 4
+---
 # Forecasting con Reti Neurali
 
 ## Introduzione alle Reti Neurali per il Forecasting

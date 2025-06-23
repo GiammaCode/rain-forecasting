@@ -1,6 +1,6 @@
 # docs/_config.yml
 
-title: Forecasting Pioggia Emilia-Romagna
+title: Forecasting Pioggia
 description: Documentazione ufficiale del progetto
 remote_theme: just-the-docs/just-the-docs@v0.6.0
 plugins:

@@ -1,4 +1,11 @@
+---
+layout: default
+title: Preprocessing
+nav_order: 2
+---
+
 # Preprocessing dei Dati
+
 
 ## Cos'è il Preprocessing
 
