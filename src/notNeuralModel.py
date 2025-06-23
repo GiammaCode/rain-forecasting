@@ -36,7 +36,7 @@ def recursive_forecast_xgb(model, x_start, n_forecast):
 def plot_xgb_forecast(test, forecast):
     plt.figure()
     plt.plot(test, label="Actual")
-    plt.plot(forecast, "-o", label="Forecast")
+    plt.plot(forecast, label="Forecast")
     plt.legend()
     plt.grid()
     plt.title("XGBoost Forecast")
