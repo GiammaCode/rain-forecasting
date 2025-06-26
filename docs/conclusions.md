@@ -42,6 +42,7 @@ Per migliorare ulteriormente le performance del sistema di previsione, si propon
 - Integrazione di **variabili esogene**: temperatura, umidità, vento, indice ENSO.
 - **Scaling dei dati** per migliorare l’apprendimento dei modelli neurali.
 - Analisi approfondita della **stagionalità** (Fourier terms, decomposizione STL).
+
 ---
 
 ## Conclusione

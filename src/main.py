@@ -1,71 +1,127 @@
-from preprocessing import (
-    load_and_plot_csv,
-    flatten_series,
-    get_train_test,
-    smooth_series,
-    describe_series,
-    check_stationarity
-)
-from utils import *
+import numpy as np
+import matplotlib.pyplot as plt
+from preprocessing import load_and_preprocess_data
+from stats_model import sarima_forecast
+from NN_model import neural_network_forecast
+from XGBoost_model import xgboost_forecast
+from dm_test import dm_test
 
-# Caricamento e preprocessing
-df = load_and_plot_csv('../data/Pioggia_Settimanale_Emilia-Romagna.csv')
-data = flatten_series(df)
-train, test = get_train_test(df)
-
-# Smoothing + descrittive + ADF
-smoothed = smooth_series(data)
-smoothedTrain = smooth_series(train)
-describe_series(data)
-check_stationarity(data)
-
-# SARIMA
-from statsModel import run_sarima
-forecastStats = run_sarima(train, test)
-print("Sarimax Accuracy:")
-print(forecast_accuracy(forecastStats, test))
-
-
-# NN
+# Configurazione per la riproducibilità
+import random
 import torch
-from neuralModel import NeuralForecaster, train_model, recursive_forecast, plot_results
-from neuralModel import set_seed
 
-look_back = 104
-trainX, trainy = create_dataset(train, look_back)
-trainX = torch.FloatTensor(trainX.squeeze())
-trainy = torch.FloatTensor(trainy.squeeze())
-
-set_seed(42)
-model = NeuralForecaster()
-model = train_model(model, trainX, trainy)
-# Predizione sui dati di training
-train_pred = model(trainX).detach().numpy()
-# Forecasting ricorsivo
-forecastNN = recursive_forecast(model, trainX[-1], len(test))
-# Plot dei risultati
-plot_results(forecastNN, test)
-# Valutazione
-print("NN Accuracy: ")
-#print(forecast_accuracy(forecastNN, test))
+np.random.seed(123)
+random.seed(123)
+torch.manual_seed(123)
 
 
-#XGBOOST
-from notNeuralModel import *
+def main():
+    """
+    Funzione principale che esegue l'intero pipeline di forecasting
+    """
+    print("=" * 80)
+    print("PROGETTO FORECASTING PIOGGE SETTIMANALI - EMILIA-ROMAGNA")
+    print("=" * 80)
 
-look_back = 104
-n_forecast = len(test)
-X, y = create_dataset(train, look_back)
+    # 1. Caricamento e preprocessing dei dati
+    print("\n1. CARICAMENTO E PREPROCESSING DEI DATI")
+    print("-" * 50)
 
-model, x_train, y_test = train_xgb_model(X, y, n_forecast)
+    train_data, test_data, full_data = load_and_preprocess_data('../data/Pioggia_Settimanale_Emilia-Romagna.csv')
 
-x_start = x_train[-1]
-forecastXGB = recursive_forecast_xgb(model, x_start, n_forecast)
+    print(f"Dati di training: {len(train_data)} settimane (2014-2023)")
+    print(f"Dati di test: {len(test_data)} settimane (2024)")
+    print(f"Dataset completo: {len(full_data)} settimane")
 
-plot_xgb_forecast(test, forecastXGB)
+    # Visualizzazione della serie temporale completa
+    plt.figure(figsize=(15, 6))
+    plt.plot(range(len(full_data)), full_data, label='Serie completa', alpha=0.7)
+    plt.axvline(x=len(train_data), color='red', linestyle='--', label='Train/Test split')
+    plt.title('Serie Temporale Piogge Settimanali Emilia-Romagna (2014-2024)')
+    plt.xlabel('Settimane')
+    plt.ylabel('Pioggia (mm)')
+    plt.legend()
+    plt.grid(True, alpha=0.3)
+    plt.tight_layout()
+    plt.show()
 
-print("XGBoost Accuracy: ")
-print(forecast_accuracy(forecastXGB, test))
+    # 2. Modello SARIMA
+    print("\n2. MODELLO SARIMA")
+    print("-" * 50)
 
-plot_forecast_comparison(test, forecastStats, forecastNN, forecastXGB)
+    sarima_pred, sarima_forecast_vals = sarima_forecast(train_data, test_data)
 
+    # 3. Rete Neurale
+    print("\n3. RETE NEURALE")
+    print("-" * 50)
+
+    nn_pred, nn_forecast_vals = neural_network_forecast(train_data, test_data)
+
+    # 4. XGBoost
+    print("\n4. XGBOOST")
+    print("-" * 50)
+
+    xgb_pred, xgb_forecast_vals = xgboost_forecast(train_data, test_data)
+
+    # 5. Confronto dei modelli
+    print("\n5. CONFRONTO DEI MODELLI")
+    print("-" * 50)
+
+    # Plot di confronto
+    plt.figure(figsize=(15, 8))
+
+    # Plot dei dati di training (ultime 52 settimane per contesto)
+    plt.plot(range(-52, 0), train_data[-52:], 'k-', label='Training (2023)', alpha=0.7)
+
+    # Plot dei dati reali 2024 e previsioni
+    plt.plot(range(len(test_data)), test_data, 'ko-', label='Dati Reali 2024', markersize=4)
+    plt.plot(range(len(sarima_forecast_vals)), sarima_forecast_vals, '--',
+             label='SARIMA', linewidth=2)
+    plt.plot(range(len(nn_forecast_vals)), nn_forecast_vals, ':',
+             label='Neural Network', linewidth=2)
+    plt.plot(range(len(xgb_forecast_vals)), xgb_forecast_vals, '-.',
+             label='XGBoost', linewidth=2)
+
+    plt.axvline(x=0, color='red', linestyle='--', alpha=0.5, label='Inizio Forecast')
+    plt.title('Confronto Modelli di Forecasting - Piogge 2024')
+    plt.xlabel('Settimane dal 2024')
+    plt.ylabel('Pioggia (mm)')
+    plt.legend()
+    plt.grid(True, alpha=0.3)
+    plt.tight_layout()
+    plt.show()
+
+    # 6. Test statistici di confronto (Diebold-Mariano)
+    print("\n6. TEST STATISTICI DI CONFRONTO")
+    print("-" * 50)
+
+    try:
+        # Confronto SARIMA vs Neural Network
+        dm_sarima_nn = dm_test(test_data, nn_forecast_vals, sarima_forecast_vals, h=1, crit="MSE")
+        print(f"SARIMA vs Neural Network - DM stat: {dm_sarima_nn.DM:.4f}, p-value: {dm_sarima_nn.p_value:.4f}")
+
+        # Confronto SARIMA vs XGBoost
+        dm_sarima_xgb = dm_test(test_data, xgb_forecast_vals, sarima_forecast_vals, h=1, crit="MSE")
+        print(f"SARIMA vs XGBoost - DM stat: {dm_sarima_xgb.DM:.4f}, p-value: {dm_sarima_xgb.p_value:.4f}")
+
+        # Confronto Neural Network vs XGBoost
+        dm_nn_xgb = dm_test(test_data, xgb_forecast_vals, nn_forecast_vals, h=1, crit="MSE")
+        print(f"Neural Network vs XGBoost - DM stat: {dm_nn_xgb.DM:.4f}, p-value: {dm_nn_xgb.p_value:.4f}")
+
+        print("\nInterpretazione:")
+        print("- Se |DM stat| > 1.96 e p-value < 0.05: differenza significativa tra i modelli")
+        print("- Se |DM stat| <= 1.96 o p-value >= 0.05: nessuna differenza significativa")
+
+    except Exception as e:
+        print(f"Errore nel calcolo del test DM: {e}")
+
+    # 7. Riepilogo finale
+    print("\n7. RIEPILOGO FINALE")
+    print("-" * 50)
+    print("Forecasting completato con successo!")
+    print("Tutti i modelli sono stati addestrati e confrontati.")
+    print("I grafici mostrano le performance relative di ciascun approccio.")
+
+
+if __name__ == "__main__":
+    main()
