@@ -65,12 +65,16 @@ Training Data (2014-2023):
 
 ### 3.2 Visualizzazioni Prodotte
 
-**Grafico 1: Analisi Training Data** *(Inserire qui: `training_analysis.png`)*
+**Grafico 1: Analisi Training Data** 
+![trainData.png](img/trainDataAnalyze.png)
+
+
 - **Subplot 1**: Serie temporale completa (520 settimane)
 - **Subplot 2**: Istogramma della distribuzione
 - **Subplot 3**: Box plot per identificare outliers
 
-**Grafico 2: Analisi Test Data** *(Inserire qui: `test_analysis.png`)*
+**Grafico 2: Analisi Test Data** 
+![testData.png](img/testDataAnlyze.png)
 - **Subplot 1**: Serie temporale 2024 (52 settimane)
 - **Subplot 2**: Istogramma della distribuzione 2024
 - **Subplot 3**: Box plot dei dati 2024
@@ -144,7 +148,8 @@ Risultato: Rifiutiamo l'ipotesi nulla. La serie è STAZIONARIA.
 
 Genera le funzioni di autocorrelazione per identificare pattern temporali e stagionalità.
 
-**Grafico 3: Autocorrelation Analysis** *(Inserire qui: `autocorrelation_analysis.png`)*
+**Grafico 3: Autocorrelation Analysis**
+![ACF.png](img/AcfAnalyze.png)
 - **Subplot 1**: ACF (Autocorrelation Function) - 52 lags
 - **Subplot 2**: PACF (Partial Autocorrelation Function) - 52 lags
 
