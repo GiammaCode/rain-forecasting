@@ -54,70 +54,58 @@ def main():
 
     nn_pred, nn_forecast_vals = neural_network_forecast(train_data, test_data)
 
-    # # 4. XGBoost
-    # print("\n4. XGBOOST")
-    # print("-" * 50)
-    #
-    # xgb_pred, xgb_forecast_vals = xgboost_forecast(train_data, test_data)
-    #
-    # # 5. Confronto dei modelli
-    # print("\n5. CONFRONTO DEI MODELLI")
-    # print("-" * 50)
-    #
-    # # Plot di confronto
-    # plt.figure(figsize=(15, 8))
-    #
-    # # Plot dei dati di training (ultime 52 settimane per contesto)
-    # plt.plot(range(-52, 0), train_data[-52:], 'k-', label='Training (2023)', alpha=0.7)
-    #
-    # # Plot dei dati reali 2024 e previsioni
-    # plt.plot(range(len(test_data)), test_data, 'ko-', label='Dati Reali 2024', markersize=4)
-    # plt.plot(range(len(sarima_forecast_vals)), sarima_forecast_vals, '--',
-    #          label='SARIMA', linewidth=2)
-    # plt.plot(range(len(nn_forecast_vals)), nn_forecast_vals, ':',
-    #          label='Neural Network', linewidth=2)
-    # plt.plot(range(len(xgb_forecast_vals)), xgb_forecast_vals, '-.',
-    #          label='XGBoost', linewidth=2)
-    #
-    # plt.axvline(x=0, color='red', linestyle='--', alpha=0.5, label='Inizio Forecast')
-    # plt.title('Confronto Modelli di Forecasting - Piogge 2024')
-    # plt.xlabel('Settimane dal 2024')
-    # plt.ylabel('Pioggia (mm)')
-    # plt.legend()
-    # plt.grid(True, alpha=0.3)
-    # plt.tight_layout()
-    # plt.show()
-    #
-    # # 6. Test statistici di confronto (Diebold-Mariano)
-    # print("\n6. TEST STATISTICI DI CONFRONTO")
-    # print("-" * 50)
-    #
-    # try:
-    #     # Confronto SARIMA vs Neural Network
-    #     dm_sarima_nn = dm_test(test_data, nn_forecast_vals, sarima_forecast_vals, h=1, crit="MSE")
-    #     print(f"SARIMA vs Neural Network - DM stat: {dm_sarima_nn.DM:.4f}, p-value: {dm_sarima_nn.p_value:.4f}")
-    #
-    #     # Confronto SARIMA vs XGBoost
-    #     dm_sarima_xgb = dm_test(test_data, xgb_forecast_vals, sarima_forecast_vals, h=1, crit="MSE")
-    #     print(f"SARIMA vs XGBoost - DM stat: {dm_sarima_xgb.DM:.4f}, p-value: {dm_sarima_xgb.p_value:.4f}")
-    #
-    #     # Confronto Neural Network vs XGBoost
-    #     dm_nn_xgb = dm_test(test_data, xgb_forecast_vals, nn_forecast_vals, h=1, crit="MSE")
-    #     print(f"Neural Network vs XGBoost - DM stat: {dm_nn_xgb.DM:.4f}, p-value: {dm_nn_xgb.p_value:.4f}")
-    #
-    #     print("\nInterpretazione:")
-    #     print("- Se |DM stat| > 1.96 e p-value < 0.05: differenza significativa tra i modelli")
-    #     print("- Se |DM stat| <= 1.96 o p-value >= 0.05: nessuna differenza significativa")
-    #
-    # except Exception as e:
-    #     print(f"Errore nel calcolo del test DM: {e}")
-    #
-    # # 7. Riepilogo finale
-    # print("\n7. RIEPILOGO FINALE")
-    # print("-" * 50)
-    # print("Forecasting completato con successo!")
-    # print("Tutti i modelli sono stati addestrati e confrontati.")
-    # print("I grafici mostrano le performance relative di ciascun approccio.")
+    # 4. XGBoost
+    print("\n4. XGBOOST")
+    print("-" * 50)
+
+    xgb_pred, xgb_forecast_vals = xgboost_forecast(train_data, test_data)
+
+    #5. Confronto dei modelli
+    print("\n5. CONFRONTO DEI MODELLI")
+    print("-" * 50)
+
+    # Plot di confronto
+    plt.figure(figsize=(15, 8))
+
+    # Plot dei dati di training (ultime 52 settimane per contesto)
+    plt.plot(range(-52, 0), train_data[-52:], 'k-', label='Training (2023)', alpha=0.7)
+
+    # Plot dei dati reali 2024 e previsioni
+    plt.plot(range(len(test_data)), test_data, 'ko-', label='Dati Reali 2024', markersize=4)
+    plt.plot(range(len(sarima_forecast_vals)), sarima_forecast_vals, '--',
+              label='SARIMA', linewidth=2)
+    plt.plot(range(len(nn_forecast_vals)), nn_forecast_vals, ':',
+              label='Neural Network', linewidth=2)
+    plt.plot(range(len(xgb_forecast_vals)), xgb_forecast_vals, '-.',
+              label='XGBoost', linewidth=2)
+
+    plt.axvline(x=0, color='red', linestyle='--', alpha=0.5, label='Inizio Forecast')
+    plt.title('Confronto Modelli di Forecasting - Piogge 2024')
+    plt.xlabel('Settimane dal 2024')
+    plt.ylabel('Pioggia (mm)')
+    plt.legend()
+    plt.grid(True, alpha=0.3)
+    plt.tight_layout()
+    plt.show()
+
+    # 6. Test statistici di confronto (Diebold-Mariano)
+    print("\n6. TEST STATISTICI DI CONFRONTO")
+    print("-" * 50)
+
+
+    # Confronto SARIMA vs Neural Network
+    dm_sarima_nn = dm_test(test_data, nn_forecast_vals, sarima_forecast_vals, h=1, crit="MSE")
+    print(f"SARIMA vs Neural Network - DM stat: {dm_sarima_nn.DM:.4f}, p-value: {dm_sarima_nn.p_value:.4f}")
+    # Confronto SARIMA vs XGBoost
+    dm_sarima_xgb = dm_test(test_data, xgb_forecast_vals, sarima_forecast_vals, h=1, crit="MSE")
+    print(f"SARIMA vs XGBoost - DM stat: {dm_sarima_xgb.DM:.4f}, p-value: {dm_sarima_xgb.p_value:.4f}")
+    # Confronto Neural Network vs XGBoost
+    dm_nn_xgb = dm_test(test_data, xgb_forecast_vals, nn_forecast_vals, h=1, crit="MSE")
+    print(f"Neural Network vs XGBoost - DM stat: {dm_nn_xgb.DM:.4f}, p-value: {dm_nn_xgb.p_value:.4f}")
+    print("\nInterpretazione:")
+    print("- Se |DM stat| > 1.96 e p-value < 0.05: differenza significativa tra i modelli")
+    print("- Se |DM stat| <= 1.96 o p-value >= 0.05: nessuna differenza significativa")
+
 
 
 if __name__ == "__main__":

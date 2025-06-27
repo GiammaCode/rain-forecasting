@@ -3,7 +3,6 @@ Modulo per la Rete Neurale per il forecasting delle piogge settimanali
 """
 
 import numpy as np
-import matplotlib.pyplot as plt
 import torch
 import torch.nn as nn
 import torch.optim as optim
@@ -193,62 +192,3 @@ def neural_network_forecast(train_data, test_data):
     print_accuracy_results(accuracy, "RETE NEURALE")
 
     return train_predictions, forecast_values
-
-
-def plot_nn_results(train_data, test_data, predictions, forecast, look_back):
-    """
-    Visualizza i risultati della Rete Neurale
-
-    Args:
-        train_data (np.array): Dati di training
-        test_data (np.array): Dati di test reali
-        predictions (np.array): Previsioni in-sample
-        forecast (np.array): Previsioni out-of-sample
-        look_back (int): Numero di time steps usati come input
-    """
-
-    plt.figure(figsize=(15, 10))
-
-    # Plot 1: Previsioni in-sample
-    plt.subplot(2, 1, 1)
-    plt.plot(train_data, label="Dati Reali Training", alpha=0.7)
-    # Le previsioni iniziano dopo look_back settimane
-    pred_x = range(look_back, len(train_data))
-    plt.plot(pred_x, predictions, label="Previsioni In-Sample", alpha=0.8)
-    plt.title('Rete Neurale - Previsioni In-Sample (Training Data)')
-    plt.xlabel('Settimane')
-    plt.ylabel('Pioggia (mm)')
-    plt.legend()
-    plt.grid(True, alpha=0.3)
-
-    # Plot 2: Forecast out-of-sample usando la funzione originale
-    plt.subplot(2, 1, 2)
-    x_forecast = list(range(1, len(forecast) + 1))  # Settimane 1–52 del 2024
-    plt.plot(x_forecast, test_data, 'ko-', label="Dati Reali 2024", markersize=4)
-    plt.plot(x_forecast, forecast, 'g--', label="Forecast Neural Network", linewidth=2)
-    plt.legend()
-    plt.grid(True, alpha=0.3)
-    plt.title("Neural Network Forecast - 2024")
-    plt.xlabel("Settimana del 2024")
-    plt.ylabel("Pioggia (mm)")
-
-    plt.tight_layout()
-    plt.show()
-
-
-def print_nn_accuracy_results(accuracy):
-    """
-    Stampa le metriche di accuratezza per la Rete Neurale
-
-    Args:
-        accuracy (dict): Dizionario con le metriche
-    """
-
-    print(f"\n--- RISULTATI ACCURATEZZA RETE NEURALE ---")
-    print(f"MAPE (Mean Absolute Percentage Error): {accuracy['mape']:.4f} ({accuracy['mape'] * 100:.2f}%)")
-    print(f"ME (Mean Error): {accuracy['me']:.4f}")
-    print(f"MAE (Mean Absolute Error): {accuracy['mae']:.4f}")
-    print(f"MPE (Mean Percentage Error): {accuracy['mpe']:.4f} ({accuracy['mpe'] * 100:.2f}%)")
-    print(f"RMSE (Root Mean Square Error): {accuracy['rmse']:.4f}")
-    print(f"Correlazione: {accuracy['corr']:.4f}")
-    print("-" * 50)

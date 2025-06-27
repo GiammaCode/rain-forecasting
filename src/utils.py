@@ -17,7 +17,7 @@ def plot_results(train_data, test_data, predictions, forecast, model_name):
     plt.subplot(2, 1, 1)
     plt.plot(train_data, label="Dati Reali Training", alpha=0.7)
     plt.plot(predictions, label="Previsioni In-Sample", alpha=0.8)
-    plt.title('{model_name.upper()} - Previsioni In-Sample (Training Data)')
+    plt.title(f'{model_name.upper()} - Previsioni In-Sample (Training Data)')
     plt.xlabel('Settimane')
     plt.ylabel('Pioggia (mm)')
     plt.legend()
@@ -32,10 +32,10 @@ def plot_results(train_data, test_data, predictions, forecast, model_name):
     plt.plot(range(len(test_data)), test_data, 'ko-',
              label='Dati Reali 2024', markersize=4)
     plt.plot(range(len(forecast)), forecast, 'r--',
-             label='Forecast {model_name.upper()}', linewidth=2)
+             label= f'Forecast {model_name.upper()}', linewidth=2)
 
     plt.axvline(x=0, color='red', linestyle=':', alpha=0.5, label='Inizio Forecast')
-    plt.title('{model_name.upper()} - Forecast Out-of-Sample (2024)')
+    plt.title(f'{model_name.upper()} - Forecast Out-of-Sample (2024)')
     plt.xlabel('Settimane dal 2024')
     plt.ylabel('Pioggia (mm)')
     plt.legend()
