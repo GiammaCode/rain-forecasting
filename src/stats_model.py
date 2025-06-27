@@ -4,7 +4,6 @@ Modulo per il modello SARIMA per il forecasting delle piogge settimanali
 
 from utils import *
 from statsmodels.tsa.statespace.sarimax import SARIMAX
-from preprocessing import forecast_accuracy
 import warnings
 warnings.filterwarnings('ignore')
 

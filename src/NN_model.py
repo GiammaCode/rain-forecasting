@@ -2,12 +2,10 @@
 Modulo per la Rete Neurale per il forecasting delle piogge settimanali
 """
 
-import numpy as np
 import torch
 import torch.nn as nn
 import torch.optim as optim
 import random
-from preprocessing import create_dataset, forecast_accuracy
 from utils import *
 
 

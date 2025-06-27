@@ -2,11 +2,8 @@
 Modulo per il modello XGBoost per il forecasting delle piogge settimanali
 """
 
-import numpy as np
-import matplotlib.pyplot as plt
 from xgboost import XGBRegressor
 from sklearn.model_selection import RandomizedSearchCV
-from preprocessing import create_dataset, forecast_accuracy
 import warnings
 warnings.filterwarnings('ignore')
 from utils import *

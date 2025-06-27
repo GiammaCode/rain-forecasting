@@ -1,4 +1,5 @@
 import matplotlib.pyplot as plt
+import numpy as np
 
 def plot_results(train_data, test_data, predictions, forecast, model_name, look_back=0):
     """
@@ -48,6 +49,49 @@ def plot_results(train_data, test_data, predictions, forecast, model_name, look_
     plt.tight_layout()
     plt.show()
 
+
+def forecast_accuracy(forecast, actual):
+    """
+    Calcola metriche di accuratezza per le previsioni
+
+    Args:
+        forecast (np.array): Valori previsti
+        actual (np.array): Valori reali
+
+    Returns:
+        dict: Dizionario con le metriche di accuratezza
+    """
+    # Maschera per evitare divisione per zero
+    non_zero_mask = actual != 0
+
+    if np.sum(non_zero_mask) > 0:
+        # MAPE solo su valori non-zero
+        mape = np.mean(np.abs(forecast[non_zero_mask] - actual[non_zero_mask]) /
+                       np.abs(actual[non_zero_mask]))
+        # MPE solo su valori non-zero
+        mpe = np.mean((forecast[non_zero_mask] - actual[non_zero_mask]) /
+                      actual[non_zero_mask])
+    else:
+        mape = np.nan
+        mpe = np.nan
+
+    # Altre metriche rimangono invariate
+    me = np.mean(forecast - actual)
+    mae = np.mean(np.abs(forecast - actual))
+    rmse = np.mean((forecast - actual) ** 2) ** 0.5
+    corr = np.corrcoef(forecast, actual)[0, 1]
+
+    return {
+        'mape': mape,
+        'me': me,
+        'mae': mae,
+        'mpe': mpe,
+        'rmse': rmse,
+        'corr': corr,
+        'zero_weeks_actual': np.sum(actual == 0),
+        'zero_weeks_forecast': np.sum(forecast == 0)
+    }
+
 def print_accuracy_results(accuracy, model_name):
     """
     Stampa le metriche di accuratezza in formato leggibile
@@ -65,3 +109,23 @@ def print_accuracy_results(accuracy, model_name):
     print(f"RMSE (Root Mean Square Error): {accuracy['rmse']:.4f}")
     print(f"Correlazione: {accuracy['corr']:.4f}")
     print("-" * 50)
+
+def create_dataset(data, look_back=1):
+    """
+    Converte una serie temporale in un dataset per supervised learning
+    Stessa funzione dell'esempio originale
+
+    Args:
+        data (np.array): Serie temporale
+        look_back (int): Numero di time steps da usare come input
+
+    Returns:
+        tuple: (X, y) array per training
+    """
+
+    X, y = [], []
+    for i in range(len(data) - look_back):
+        X.append(data[i:(i + look_back)])
+        y.append(data[i + look_back])
+
+    return np.array(X), np.array(y)
