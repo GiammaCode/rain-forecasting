@@ -43,7 +43,6 @@ def load_and_preprocess_data(filepath):
     # Conversione in array numpy
     train_data = np.array(train_data)
     test_data = np.array(test_data)
-    full_data = np.array(full_data)
 
     print(f"Dati caricati: {len(train_data)} settimane training, {len(test_data)} settimane test")
 
@@ -255,7 +254,6 @@ def create_dataset(data, look_back=1):
 
     return np.array(X), np.array(y)
 
-# Funzione di accuratezza (copiata dall'esempio originale)
 def forecast_accuracy(forecast, actual):
     """
     Calcola metriche di accuratezza per le previsioni

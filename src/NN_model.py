@@ -7,31 +7,102 @@ import matplotlib.pyplot as plt
 import torch
 import torch.nn as nn
 import torch.optim as optim
+import random
 from preprocessing import create_dataset, forecast_accuracy
+from utils import *
 
 
 class RainForecastNN(nn.Module):
     """
     Rete Neurale per il forecasting delle piogge
-    Architettura: Input -> Hidden Layers -> Output
     """
-
-    def __init__(self, input_size=52):
+    def __init__(self, input_size=104):
         super(RainForecastNN, self).__init__()
-
-        # Architettura della rete (seguendo l'esempio originale ma adattata)
+        self.input_size = input_size
         self.network = nn.Sequential(
-            nn.Linear(input_size, 26),  # input_size -> 26 neuroni
+            nn.Linear(input_size, 64),
             nn.ReLU(),
-            nn.Linear(26, 13),  # 26 -> 13 neuroni
+            nn.Linear(64, 32),
             nn.ReLU(),
-            nn.Linear(13, 6),  # 13 -> 6 neuroni
-            nn.ReLU(),
-            nn.Linear(6, 1)  # 6 -> 1 output (previsione)
+            nn.Linear(32, 1)
         )
 
     def forward(self, x):
         return self.network(x)
+
+
+def set_seed(seed=42):
+    """Imposta il seed per riproducibilità"""
+    torch.manual_seed(seed)
+    np.random.seed(seed)
+    random.seed(seed)
+    torch.backends.cudnn.deterministic = True
+    torch.backends.cudnn.benchmark = False
+
+
+def train_model(model, X, y, lr=0.0007, n_epochs=1000, batch_size=8, patience=100):
+    """Addestra il modello"""
+    loss_fn = nn.HuberLoss(delta=3.0)  # delta si può regolare
+    optimizer = optim.Adam(model.parameters(), lr=lr)
+
+    epoch_losses = []
+    best_loss = float("inf")
+    patience_counter = 0
+
+    for epoch in range(n_epochs):
+        model.train()
+        epoch_loss = 0.0
+        n_batches = 0
+
+        for i in range(0, len(X), batch_size):
+            Xbatch = X[i:i + batch_size]
+            ybatch = y[i:i + batch_size]
+            y_pred = model(Xbatch)
+            loss = loss_fn(y_pred.squeeze(1), ybatch)
+
+            optimizer.zero_grad()
+            loss.backward()
+            optimizer.step()
+
+            epoch_loss += loss.item()
+            n_batches += 1
+
+        avg_epoch_loss = epoch_loss / n_batches
+        epoch_losses.append(avg_epoch_loss)
+
+        # Early stopping check (commentato come nell'originale)
+        # if avg_epoch_loss < best_loss - 1e-5:
+        #     best_loss = avg_epoch_loss
+        #     patience_counter = 0
+        # else:
+        #     patience_counter += 1
+        #     if patience_counter >= patience:
+        #         print(f"Early stopping at epoch {epoch}, best loss: {best_loss:.6f}")
+        #         break
+
+        if epoch % 100 == 0 or epoch == n_epochs - 1:
+            print(f'Epoch {epoch}, Loss: {avg_epoch_loss:.6f}')
+
+    return model, epoch_losses
+
+
+def recursive_forecast(model, initial_input, n_steps):
+    """Genera forecast ricorsivo"""
+    model.eval()
+    input_seq = initial_input.tolist()
+    forecast = []
+
+    with torch.no_grad():
+        for step in range(n_steps):
+            input_tensor = torch.tensor(input_seq, dtype=torch.float32).unsqueeze(0)
+            pred = model(input_tensor).item()
+            forecast.append(pred)
+            input_seq = input_seq[1:] + [pred]
+
+            if (step + 1) % 10 == 0:
+                print(f"Generata previsione per settimana {step + 1}/{n_steps}")
+
+    return forecast
 
 
 def neural_network_forecast(train_data, test_data):
@@ -49,7 +120,10 @@ def neural_network_forecast(train_data, test_data):
     print("Preparazione dati per la Rete Neurale...")
 
     # Parametri
-    look_back = 52  # Usa 52 settimane (1 anno) per predire la settimana successiva
+    look_back = 104  # Usa 104 settimane (2 anni) per predire la settimana successiva
+
+    # Imposta seed per riproducibilità
+    set_seed(42)
 
     # Creazione del dataset per supervised learning
     X, y = create_dataset(train_data, look_back)
@@ -59,7 +133,7 @@ def neural_network_forecast(train_data, test_data):
 
     # Conversione in tensori PyTorch
     X_tensor = torch.FloatTensor(X)
-    y_tensor = torch.FloatTensor(y).unsqueeze(1)  # Aggiungi dimensione per compatibilità
+    y_tensor = torch.FloatTensor(y)
 
     print("Inizializzazione e addestramento della Rete Neurale...")
 
@@ -67,50 +141,15 @@ def neural_network_forecast(train_data, test_data):
     model = RainForecastNN(input_size=look_back)
     print(f"Architettura del modello:\n{model}")
 
-    # Definizione della loss function e optimizer
-    criterion = nn.MSELoss()
-    optimizer = optim.Adam(model.parameters(), lr=0.001)  # Learning rate leggermente più alto
-
-    # Parametri di training
-    n_epochs = 1000
-    batch_size = 8  # Batch size più grande per stabilità
-
-    print(f"Parametri training: {n_epochs} epoche, batch size = {batch_size}")
+    # Training del modello
     print("Inizio training...")
-
-    # Training loop
-    model.train()
-    epoch_losses = []
-
-    for epoch in range(n_epochs):
-        epoch_loss = 0.0
-        n_batches = 0
-
-        # Training in mini-batches
-        for i in range(0, len(X_tensor), batch_size):
-            # Estrazione batch
-            X_batch = X_tensor[i:i + batch_size]
-            y_batch = y_tensor[i:i + batch_size]
-
-            # Forward pass
-            y_pred = model(X_batch)
-            loss = criterion(y_pred, y_batch)
-
-            # Backward pass
-            optimizer.zero_grad()
-            loss.backward()
-            optimizer.step()
-
-            epoch_loss += loss.item()
-            n_batches += 1
-
-        avg_epoch_loss = epoch_loss / n_batches
-        epoch_losses.append(avg_epoch_loss)
-
-        # Stampa progresso ogni 100 epoche
-        if (epoch + 1) % 100 == 0:
-            print(f'Epoca {epoch + 1}/{n_epochs}, Loss: {avg_epoch_loss:.6f}')
-
+    model, epoch_losses = train_model(
+        model, X_tensor, y_tensor,
+        lr=0.0007,
+        n_epochs=1000,
+        batch_size=8,
+        patience=100
+    )
     print("Training completato!")
 
     # Plot della loss durante il training
@@ -119,7 +158,7 @@ def neural_network_forecast(train_data, test_data):
     plt.plot(epoch_losses)
     plt.title('Training Loss')
     plt.xlabel('Epoca')
-    plt.ylabel('MSE Loss')
+    plt.ylabel('Huber Loss')
     plt.grid(True, alpha=0.3)
 
     # Plot ultimi 100 epoche per vedere convergenza
@@ -127,7 +166,7 @@ def neural_network_forecast(train_data, test_data):
     plt.plot(epoch_losses[-100:])
     plt.title('Training Loss (Ultime 100 epoche)')
     plt.xlabel('Epoca')
-    plt.ylabel('MSE Loss')
+    plt.ylabel('Huber Loss')
     plt.grid(True, alpha=0.3)
     plt.tight_layout()
     plt.show()
@@ -136,39 +175,22 @@ def neural_network_forecast(train_data, test_data):
     print("Generazione previsioni in-sample...")
     model.eval()
     with torch.no_grad():
-        train_predictions = model(X_tensor).numpy().flatten()
+        train_predictions = model(X_tensor).squeeze().numpy()
 
     # Forecasting ricorsivo per i dati di test
     print("Generazione forecast out-of-sample con approccio ricorsivo...")
 
     # Inizializza con l'ultima finestra di training
-    input_sequence = train_data[-look_back:].tolist()
-    forecast_values = []
-
-    model.eval()
-    with torch.no_grad():
-        for step in range(len(test_data)):
-            # Converte la sequenza corrente in tensore
-            input_tensor = torch.tensor(input_sequence, dtype=torch.float32).unsqueeze(0)
-
-            # Genera previsione
-            prediction = model(input_tensor).item()
-            forecast_values.append(prediction)
-
-            # Aggiorna la sequenza: rimuovi il primo elemento e aggiungi la previsione
-            input_sequence = input_sequence[1:] + [prediction]
-
-            if (step + 1) % 10 == 0:
-                print(f"Generata previsione per settimana {step + 1}/52")
-
+    initial_input = train_data[-look_back:]
+    forecast_values = recursive_forecast(model, initial_input, len(test_data))
     forecast_values = np.array(forecast_values)
 
     # Visualizzazione risultati
-    plot_nn_results(train_data, test_data, train_predictions, forecast_values, look_back)
+    plot_results(train_data, test_data, train_predictions, forecast_values, "RETE NEURALE")
 
     # Calcolo accuratezza
     accuracy = forecast_accuracy(forecast_values, test_data)
-    print_nn_accuracy_results(accuracy)
+    print_accuracy_results(accuracy, "RETE NEURALE")
 
     return train_predictions, forecast_values
 
@@ -199,23 +221,16 @@ def plot_nn_results(train_data, test_data, predictions, forecast, look_back):
     plt.legend()
     plt.grid(True, alpha=0.3)
 
-    # Plot 2: Forecast out-of-sample
+    # Plot 2: Forecast out-of-sample usando la funzione originale
     plt.subplot(2, 1, 2)
-    # Mostra le ultime 52 settimane del training per contesto
-    context_weeks = min(52, len(train_data))
-    plt.plot(range(-context_weeks, 0), train_data[-context_weeks:],
-             'k-', label='Training (Contesto)', alpha=0.7)
-    plt.plot(range(len(test_data)), test_data, 'ko-',
-             label='Dati Reali 2024', markersize=4)
-    plt.plot(range(len(forecast)), forecast, 'g--',
-             label='Forecast Neural Network', linewidth=2)
-
-    plt.axvline(x=0, color='red', linestyle=':', alpha=0.5, label='Inizio Forecast')
-    plt.title('Rete Neurale - Forecast Out-of-Sample (2024)')
-    plt.xlabel('Settimane dal 2024')
-    plt.ylabel('Pioggia (mm)')
+    x_forecast = list(range(1, len(forecast) + 1))  # Settimane 1–52 del 2024
+    plt.plot(x_forecast, test_data, 'ko-', label="Dati Reali 2024", markersize=4)
+    plt.plot(x_forecast, forecast, 'g--', label="Forecast Neural Network", linewidth=2)
     plt.legend()
     plt.grid(True, alpha=0.3)
+    plt.title("Neural Network Forecast - 2024")
+    plt.xlabel("Settimana del 2024")
+    plt.ylabel("Pioggia (mm)")
 
     plt.tight_layout()
     plt.show()
