@@ -185,7 +185,7 @@ def neural_network_forecast(train_data, test_data):
     forecast_values = np.array(forecast_values)
 
     # Visualizzazione risultati
-    plot_results(train_data, test_data, train_predictions, forecast_values, "RETE NEURALE")
+    plot_results(train_data, test_data, train_predictions, forecast_values, "RETE NEURALE", look_back)
 
     # Calcolo accuratezza
     accuracy = forecast_accuracy(forecast_values, test_data)

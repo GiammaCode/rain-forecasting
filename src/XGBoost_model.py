@@ -141,7 +141,7 @@ def xgboost_forecast(train_data, test_data, tune_hyperparams=False):
         forecast = np.array(forecast)
 
         # Visualizzazione risultati
-        plot_results(train_data, test_data, in_sample_pred, forecast, "XGBoost")
+        plot_results(train_data, test_data, in_sample_pred, forecast, "XGBoost", look_back)
 
         # Calcolo accuratezza
         accuracy = forecast_accuracy(forecast, test_data)

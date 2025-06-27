@@ -1,6 +1,6 @@
 import matplotlib.pyplot as plt
 
-def plot_results(train_data, test_data, predictions, forecast, model_name):
+def plot_results(train_data, test_data, predictions, forecast, model_name, look_back=0):
     """
        Visualizza i risultati dei modelli
 
@@ -16,7 +16,11 @@ def plot_results(train_data, test_data, predictions, forecast, model_name):
     # Plot 1: Previsioni in-sample
     plt.subplot(2, 1, 1)
     plt.plot(train_data, label="Dati Reali Training", alpha=0.7)
-    plt.plot(predictions, label="Previsioni In-Sample", alpha=0.8)
+    if look_back > 0:
+        pred_x = range(look_back, len(train_data))
+        plt.plot(pred_x, predictions, label="Previsioni In-Sample", alpha=0.8)
+    else:
+        plt.plot(predictions, label="Previsioni In-Sample", alpha=0.8)
     plt.title(f'{model_name.upper()} - Previsioni In-Sample (Training Data)')
     plt.xlabel('Settimane')
     plt.ylabel('Pioggia (mm)')
