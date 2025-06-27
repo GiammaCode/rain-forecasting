@@ -1,4 +1,10 @@
-# Documentazione Modello Rete Neurale - Deep Learning per Forecasting Piogge
+---
+layout: default
+title: Rete neurale
+nav_order: 4
+---
+
+# Modello Rete Neurale 
 
 ## Panoramica
 

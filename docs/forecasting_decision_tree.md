@@ -1,4 +1,10 @@
-# Documentazione Modello XGBoost - Gradient Boosting per Forecasting Piogge
+---
+layout: default
+title: XGBoost
+nav_order: 5
+---
+
+# Modello XGBoost 
 
 ## Panoramica
 
