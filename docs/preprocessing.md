@@ -100,12 +100,6 @@ lower_bound = Q1 - 1.5 * IQR
 upper_bound = Q3 + 1.5 * IQR
 ```
 
-**Metodo Z-Score**:
-```python
-z_scores = np.abs(stats.zscore(data))
-outliers_mask = z_scores > threshold  # threshold=3
-```
-
 #### Filosofia di Gestione:
 - **Non Rimozione**: Gli outliers non vengono rimossi dal dataset
 - **Motivazione**: Eventi meteorologici estremi (es. alluvioni, periodi di siccità) sono parte naturale della variabilità climatica

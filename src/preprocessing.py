@@ -129,35 +129,23 @@ def handle_outliers(data, method='iqr', threshold=3):
 
     data_clean = data.copy()
 
-    if method == 'iqr':
-        # Metodo Interquartile Range
-        Q1 = np.percentile(data, 25)
-        Q3 = np.percentile(data, 75)
-        IQR = Q3 - Q1
-        lower_bound = Q1 - 1.5 * IQR
-        upper_bound = Q3 + 1.5 * IQR
+    # Metodo Interquartile Range
+    Q1 = np.percentile(data, 25)
+    Q3 = np.percentile(data, 75)
+    IQR = Q3 - Q1
+    lower_bound = Q1 - 1.5 * IQR
+    upper_bound = Q3 + 1.5 * IQR
 
-        outliers_mask = (data < lower_bound) | (data > upper_bound)
-        outliers_count = np.sum(outliers_mask)
+    outliers_mask = (data < lower_bound) | (data > upper_bound)
+    outliers_count = np.sum(outliers_mask)
 
-        print(f"Outliers identificati con metodo IQR: {outliers_count}")
-        print(f"Bounds: [{lower_bound:.2f}, {upper_bound:.2f}]")
+    print(f"Outliers identificati con metodo IQR: {outliers_count}")
+    print(f"Bounds: [{lower_bound:.2f}, {upper_bound:.2f}]")
 
-        # Non rimuoviamo gli outliers ma li segnaliamo
-        # Per i dati di pioggia, valori molto alti potrebbero essere eventi meteorologici estremi reali
-        if outliers_count > 0:
-            print(f"Valori outlier: {data[outliers_mask]}")
-
-    elif method == 'zscore':
-        # Metodo Z-Score
-        z_scores = np.abs(stats.zscore(data))
-        outliers_mask = z_scores > threshold
-        outliers_count = np.sum(outliers_mask)
-
-        print(f"Outliers identificati con Z-score (threshold={threshold}): {outliers_count}")
-
-        if outliers_count > 0:
-            print(f"Valori outlier: {data[outliers_mask]}")
+    # Non rimuoviamo gli outliers ma li segnaliamo
+    # Per i dati di pioggia, valori molto alti potrebbero essere eventi meteorologici estremi reali
+    if outliers_count > 0:
+        print(f"Valori outlier: {data[outliers_mask]}")
 
     # Gestione dei valori zero
     zero_count = np.sum(data == 0)

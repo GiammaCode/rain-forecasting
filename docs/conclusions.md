@@ -1,55 +1,80 @@
-# Conclusioni e Sviluppi Futuri
+# Conclusioni e Confronto Modelli di Forecasting Piogge Emilia-Romagna
 
-## Confronto Finale dei Modelli
+## Panoramica
 
-L’obiettivo del progetto era valutare diverse tecniche di forecasting per prevedere la **pioggia settimanale** nel 2024.
-I modelli testati sono stati:
+Questo documento presenta l'analisi comparativa completa dei tre modelli di forecasting implementati per la predizione delle piogge settimanali dell'Emilia-Romagna nel 2024: SARIMA, Rete Neurale e XGBoost. La valutazione include metriche di accuratezza, test statistici di significatività e analisi delle performance relative.
 
-- SARIMAX (modello statistico),
-- Rete Neurale Feedforward (PyTorch),
-- XGBoost (alberi decisionali potenziati).
+## 1. Riepilogo Performance dei Modelli
+![confronto.png](img/confronto.png)
+### 1.1 Tabella Comparativa delle Metriche
 
-Di seguito un confronto visivo delle previsioni:
+| Metrica | SARIMA | Rete Neurale | XGBoost | Migliore |
+|---------|--------|--------------|---------|----------|
+| **MAE (mm)** | 2.86 | 5.42 | 4.69 | SARIMA |
+| **RMSE (mm)** | 4.69 | 6.92 | 6.14 | SARIMA |
+| **ME (mm)** | -0.81 | -4.25 | -0.96 | SARIMA |
+| **MAPE (%)** | 14.97 | 33.20 | 31.54 | SARIMA |
+| **MPE (%)** | -8.00 | -20.63 | -0.49 | XGBoost |
+| **Correlazione** | 0.8504 | 0.7712 | 0.7328 | SARIMA |
 
-![Confronto Previsioni](img/versusplot.png)
+## 2. Test Statistici di Confronto (Diebold-Mariano)
 
----
+### 2.1 Risultati dei Test DM
 
-## Risultati Principali
+```
+SARIMA vs Neural Network - DM stat: 2.8243, p-value: 0.0067
+SARIMA vs XGBoost - DM stat: 2.8237, p-value: 0.0068
+Neural Network vs XGBoost - DM stat: -1.3425, p-value: 0.1854
+```
 
-| Modello          | MAPE (%) | MAE (mm) | RMSE (mm)   | Corr     |
-|------------------|----------|----------|-------------|----------|
-| **SARIMAX**      | 1.93     | **8.63** | **11.42**   | **0.46** |
-| **Neural Net**   | **1.90** | 8.98     | 11.92       | 0.30     |
-| **XGBoost**      | 2.42     | 8.83     | 11.80       | 0.35     |
+### 2.2 Interpretazione Statistica
 
-### Osservazioni:
+#### Criteri di Significatività:
+- **Significativo**: |DM stat| > 1.96 e p-value < 0.05
+- **Non Significativo**: |DM stat| ≤ 1.96 o p-value ≥ 0.05
 
-- Il **modello SARIMAX** ha ottenuto le migliori performance complessive, specialmente in termini di errore e correlazione.
-- La **rete neurale** ha mostrato buone prestazioni, ma ha sofferto nella coerenza temporale.
-- **XGBoost**, pur essendo robusto, ha faticato a catturare la stagionalità intrinseca della serie.
+#### Analisi dei Risultati:
 
----
+**SARIMA vs Rete Neurale:**
+- **DM statistic**: 2.8243 (> 1.96)
+- **p-value**: 0.0067 (< 0.05)
+- **Conclusione**: SARIMA è **statisticamente superiore** alla Rete Neurale
 
-## Sviluppi Futuri
+**SARIMA vs XGBoost:**
+- **DM statistic**: 2.8237 (> 1.96)
+- **p-value**: 0.0068 (< 0.05)
+- **Conclusione**: SARIMA è **statisticamente superiore** a XGBoost
 
-Per migliorare ulteriormente le performance del sistema di previsione, si propongono i seguenti sviluppi:
+**Rete Neurale vs XGBoost:**
+- **DM statistic**: -1.3425 (< 1.96 in valore assoluto)
+- **p-value**: 0.1854 (> 0.05)
+- **Conclusione**: **Nessuna differenza statisticamente significativa** tra i due modelli
 
-- **Modelli RNN o LSTM** per catturare la dipendenza sequenziale temporale più efficacemente.
-- **Ensemble di modelli** (es. media pesata tra SARIMAX e RNN).
-- Utilizzo di **modelli probabilistici** (es. Prophet, DeepAR).
 
-- Integrazione di **variabili esogene**: temperatura, umidità, vento, indice ENSO.
-- **Scaling dei dati** per migliorare l’apprendimento dei modelli neurali.
-- Analisi approfondita della **stagionalità** (Fourier terms, decomposizione STL).
+## 3. Conclusioni Finali
 
----
+### 3.1 Sintesi Esecutiva
 
-## Conclusione
+Il confronto statistico e metodologico dei tre modelli di forecasting porta alle seguenti conclusioni definitive:
 
-Il progetto ha dimostrato l’efficacia dell’approccio SARIMAX per problemi di forecasting meteorologico stagionale,
-con possibilità di ulteriore miglioramento tramite modelli neurali e tecniche ensemble.
+1. **SARIMA emerge come vincitore chiaro** con superiorità statisticamente significativa su entrambi i concorrenti
+2. **XGBoost rappresenta una valida alternativa** con bias minimo e buona robustezza
+3. **La Rete Neurale necessita ottimizzazioni sostanziali** prima di essere considerata competitiva
+4. **I test di Diebold-Mariano confermano** la gerarchia emersa dalle metriche di accuratezza
 
-Le basi sono solide per costruire un sistema predittivo stabile, interpretabile e pronto per
-l’integrazione in sistemi decisionali operativi.
+### 6.2 Decisione Strategica
 
+**Per l'implementazione operativa immediate, si raccomanda:**
+- **Adozione di SARIMA** come modello principale
+- **Sviluppo parallelo di XGBoost** come sistema di backup e validazione
+- **Ricerca e sviluppo** sulla Rete Neurale per miglioramenti futuri
+
+### 6.3 Valore Aggiunto dello Studio
+
+Questo progetto ha dimostrato che:
+- **I modelli statistici classici** mantengono rilevanza e competitività
+- **La complessità algoritmica** non garantisce automaticamente performance superiori
+- **I test statistici formali** sono essenziali per validare le conclusioni empiriche
+- **Un approccio sistematico** al confronto modelli porta a decisioni più informate
+
+La superiorità di SARIMA in questo contesto specifico sottolinea l'importanza di valutare ogni problema di forecasting nel suo merito, senza pregiudizi verso approcci più o meno sofisticati dal punto di vista computazionale.

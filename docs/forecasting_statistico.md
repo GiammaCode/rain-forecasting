@@ -83,16 +83,12 @@ La funzione esegue le seguenti operazioni:
 fitted_model = model.fit(
     disp=False,           # Sopprimi output verbose
     maxiter=100,          # Massimo 100 iterazioni
-    enforce_stationarity=False,  # Permetti coefficienti al limite
-    enforce_invertibility=False  # Permetti radici al limite
 )
 ```
 
 ## 4. Risultati del Modello
 
 ### 4.1 Metriche di Fitting
-*(Inserire qui i risultati del tuo run specifico)*
-
 ```
 Modello addestrato con successo!
 AIC: 3105.50
