@@ -80,7 +80,7 @@ Training Data (2014-2023):
 - **Subplot 3**: Box plot per identificare outliers
 
 **Grafico 2: Analisi Test Data** 
-![testData.png](img/testDataAnlyze.png)
+![testData.png](img/testDataAnalyze.png)
 - **Subplot 1**: Serie temporale 2024 (52 settimane)
 - **Subplot 2**: Istogramma della distribuzione 2024
 - **Subplot 3**: Box plot dei dati 2024
