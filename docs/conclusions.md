@@ -10,21 +10,22 @@ Questo documento presenta l'analisi comparativa completa dei tre modelli di fore
 
 | Metrica | SARIMA | Rete Neurale | XGBoost | Migliore |
 |---------|--------|--------------|---------|----------|
-| **MAE (mm)** | 2.86 | 5.42 | 4.69 | SARIMA |
-| **RMSE (mm)** | 4.69 | 6.92 | 6.14 | SARIMA |
-| **ME (mm)** | -0.81 | -4.25 | -0.96 | SARIMA |
-| **MAPE (%)** | 14.97 | 33.20 | 31.54 | SARIMA |
-| **MPE (%)** | -8.00 | -20.63 | -0.49 | XGBoost |
-| **Correlazione** | 0.8504 | 0.7712 | 0.7328 | SARIMA |
+| **MAE (mm)** | 1.74 | 5.44 | 4.27 | SARIMA |
+| **RMSE (mm)** | 3.75 | 7.14 | 6.33 | SARIMA |
+| **ME (mm)** | -0.90 | -1.06 | -1.48 | SARIMA |
+| **MAPE (%)** | **9.55** | 28.79 | 23.87 | **SARIMA** |
+| **MPE (%)** | -7.56 | -6.02 | -7.70 | Rete Neurale |
+| **Correlazione** | **0.9003** | 0.6499 | 0.6951 | **SARIMA** |
+
 
 ## 2. Test Statistici di Confronto (Diebold-Mariano)
 
 ### 2.1 Risultati dei Test DM
 
 ```
-SARIMA vs Neural Network - DM stat: 2.8243, p-value: 0.0067
-SARIMA vs XGBoost - DM stat: 2.8237, p-value: 0.0068
-Neural Network vs XGBoost - DM stat: -1.3425, p-value: 0.1854
+SARIMA vs Neural Network - DM stat: 5.2411, p-value: 0.0000
+SARIMA vs XGBoost - DM stat: 2.9026, p-value: 0.0055
+Neural Network vs XGBoost - DM stat: -1.0153, p-value: 0.3148
 ```
 
 ### 2.2 Interpretazione Statistica
@@ -33,48 +34,30 @@ Neural Network vs XGBoost - DM stat: -1.3425, p-value: 0.1854
 - **Significativo**: |DM stat| > 1.96 e p-value < 0.05
 - **Non Significativo**: |DM stat| ≤ 1.96 o p-value ≥ 0.05
 
-#### Analisi dei Risultati:
-
-**SARIMA vs Rete Neurale:**
-- **DM statistic**: 2.8243 (> 1.96)
-- **p-value**: 0.0067 (< 0.05)
-- **Conclusione**: SARIMA è **statisticamente superiore** alla Rete Neurale
-
-**SARIMA vs XGBoost:**
-- **DM statistic**: 2.8237 (> 1.96)
-- **p-value**: 0.0068 (< 0.05)
-- **Conclusione**: SARIMA è **statisticamente superiore** a XGBoost
-
-**Rete Neurale vs XGBoost:**
-- **DM statistic**: -1.3425 (< 1.96 in valore assoluto)
-- **p-value**: 0.1854 (> 0.05)
-- **Conclusione**: **Nessuna differenza statisticamente significativa** tra i due modelli
-
 
 ## 3. Conclusioni Finali
+### 3.2 BenchMark climatico
 
-### 3.1 Sintesi Esecutiva
+| Categoria    | MAPE    | Risultato                                    |
+|--------------|---------|----------------------------------------------|
+| ECCELLENTE:  | 5-15%   | (Quasi impossibile per piogge settimanali)   |
+| MOLTO BUONO: | 15-25%  | (Risultato professionale)                    |
+| BUONO:       | 25-35%  | (Accettabile per uso operativo)              |
+| ACCETTABILE: | 35-50%  | (Usabile ma migliorabile)                    |
+| SCARSO:      | 50%+    | (Non utilizzabile)                           |
+
+
+### 3.1 Sintesi eseguita
+
+**SARIMA:**      9.55%  ECCELLENTE
+
+**XGBoost:**    23.87%  MOLTO BUONO
+
+**Neural Net:** 28.79%  BUONO
 
 Il confronto statistico e metodologico dei tre modelli di forecasting porta alle seguenti conclusioni definitive:
 
 1. **SARIMA emerge come vincitore chiaro** con superiorità statisticamente significativa su entrambi i concorrenti
 2. **XGBoost rappresenta una valida alternativa** con bias minimo e buona robustezza
-3. **La Rete Neurale necessita ottimizzazioni sostanziali** prima di essere considerata competitiva
+3. **La Rete Neurale** ha comunque un risultato sufficiente rispetto al benchmark
 4. **I test di Diebold-Mariano confermano** la gerarchia emersa dalle metriche di accuratezza
-
-### 6.2 Decisione Strategica
-
-**Per l'implementazione operativa immediate, si raccomanda:**
-- **Adozione di SARIMA** come modello principale
-- **Sviluppo parallelo di XGBoost** come sistema di backup e validazione
-- **Ricerca e sviluppo** sulla Rete Neurale per miglioramenti futuri
-
-### 6.3 Valore Aggiunto dello Studio
-
-Questo progetto ha dimostrato che:
-- **I modelli statistici classici** mantengono rilevanza e competitività
-- **La complessità algoritmica** non garantisce automaticamente performance superiori
-- **I test statistici formali** sono essenziali per validare le conclusioni empiriche
-- **Un approccio sistematico** al confronto modelli porta a decisioni più informate
-
-La superiorità di SARIMA in questo contesto specifico sottolinea l'importanza di valutare ogni problema di forecasting nel suo merito, senza pregiudizi verso approcci più o meno sofisticati dal punto di vista computazionale.
