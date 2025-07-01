@@ -38,8 +38,8 @@ Neural Network vs XGBoost - DM stat: -1.0153, p-value: 0.3148
 ### 2.2 Interpretazione Statistica
 
 #### Criteri di Significatività:
-- **Significativo**: |DM stat| > 1.96 e p-value < 0.05
-- **Non Significativo**: |DM stat| ≤ 1.96 o p-value ≥ 0.05
+- **Significativo**: DM stat > 1.96 e p-value < 0.05
+- **Non Significativo**: DM stat ≤ 1.96 o p-value ≥ 0.05
 
 
 ## 3. Conclusioni Finali
