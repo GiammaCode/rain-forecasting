@@ -1,11 +1,18 @@
-# Conclusioni e Confronto Modelli di Forecasting Piogge Emilia-Romagna
+---
+layout: default
+title: SARIMA
+nav_order: 6
+---
 
+# Conclusioni e Confronto 
 ## Panoramica
 
 Questo documento presenta l'analisi comparativa completa dei tre modelli di forecasting implementati per la predizione delle piogge settimanali dell'Emilia-Romagna nel 2024: SARIMA, Rete Neurale e XGBoost. La valutazione include metriche di accuratezza, test statistici di significatività e analisi delle performance relative.
 
 ## 1. Riepilogo Performance dei Modelli
+
 ![confronto.png](img/confronto.png)
+
 ### 1.1 Tabella Comparativa delle Metriche
 
 | Metrica | SARIMA | Rete Neurale | XGBoost | Migliore |
