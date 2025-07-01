@@ -39,30 +39,16 @@ seasonal_order = (1, 1, 1, 52)  # Componenti stagionali
 
 ### 2.2 Giustificazione dei Parametri
 
-#### Componenti Non Stagionali (1,1,1):
+#### Componenti Non Stagionali (1,1,2):
 - **p=1**: Una dipendenza autoregressiva di primo ordine
 - **d=1**: Una differenziazione per rendere la serie stazionaria
-- **q=1**: Un termine moving average di primo ordine
+- **q=2**: Un termine moving average di secondo ordine
 
 #### Componenti Stagionali (1,1,1,52):
 - **P=1**: Dipendenza autoregressiva stagionale di primo ordine
 - **D=1**: Differenziazione stagionale
 - **Q=1**: Moving average stagionale di primo ordine
 - **s=52**: Ciclo stagionale di 52 settimane (annuale)
-
-### 2.3 Equazione del Modello
-
-Il modello SARIMA(1,1,1)(1,1,1,52) può essere scritto come:
-
-```
-(1 - φ₁B)(1 - Φ₁B⁵²)(1-B)(1-B⁵²)Xₜ = (1 + θ₁B)(1 + Θ₁B⁵²)εₜ
-```
-
-Dove:
-- **B**: Operatore di ritardo (Backshift)
-- **φ₁, Φ₁**: Coefficienti autoregressivi (non stagionale e stagionale)
-- **θ₁, Θ₁**: Coefficienti moving average (non stagionale e stagionale)
-- **εₜ**: Rumore bianco
 
 ## 3. Implementazione del Modello
 
@@ -91,13 +77,13 @@ fitted_model = model.fit(
 ### 4.1 Metriche di Fitting
 ```
 Modello addestrato con successo!
-AIC: 3105.50
-BIC: 3125.62
+AIC: 3089.85
+BIC: 3113.98
 ```
 
 #### Interpretazione:
-- **AIC (Akaike Information Criterion)**: 3105.50
-- **BIC (Bayesian Information Criterion)**: 3125.62
+- **AIC (Akaike Information Criterion)**
+- **BIC (Bayesian Information Criterion)**
 - Valori più bassi indicano modelli migliori (per confronti relativi)
 
 ### 4.2 Metriche di Accuratezza
@@ -105,21 +91,21 @@ BIC: 3125.62
 #### Risultati Ottenuti:
 ```
 --- RISULTATI ACCURATEZZA SARIMA ---
-MAPE (Mean Absolute Percentage Error): 0.1497 (14.97%)
-ME (Mean Error): -0.8058
-MAE (Mean Absolute Error): 2.8624
-MPE (Mean Percentage Error): -0.0800 (-8.00%)
-RMSE (Root Mean Square Error): 4.6908
-Correlazione: 0.8504
+MAPE (Mean Absolute Percentage Error): 0.0955 (9.55%)
+ME (Mean Error): -0.8993
+MAE (Mean Absolute Error): 1.7397
+MPE (Mean Percentage Error): -0.0756 (-7.56%)
+RMSE (Root Mean Square Error): 3.7483
+Correlazione: 0.9003
 ```
 
 #### Interpretazione delle Metriche:
 
 **Metriche Valide:**
-- **MAE = 2.86 mm**: Errore medio assoluto accettabile
-- **RMSE = 4.69 mm**: Errore quadratico medio buono
-- **ME = -0.8 mm**: Bias negativo piccolo (leggera sottostima)
-- **Correlazione = 0.8504**: Ottima correlazione tra predetto e osservato
+- **MAE = 1.73 mm**: Errore medio assoluto accettabile
+- **RMSE = 3.75 mm**: Errore quadratico medio buono
+- **ME = -0.9 mm**: Bias negativo piccolo (leggera sottostima)
+- **Correlazione = 0.9**: Ottima correlazione tra predetto e osservato
 
 ## 5. Visualizzazioni Generate
 

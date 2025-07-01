@@ -20,12 +20,12 @@ def sarima_forecast(train_data, test_data):
     """
 
     print("Addestramento modello SARIMA...")
-    print("Parametri: order=(1,1,1), seasonal_order=(1,1,1,52)")
+    print("Parametri: order=(1,1,2), seasonal_order=(1,1,1,52)")
 
     # Definizione parametri del modello
     # order = (p, d, q) - parametri non stagionali
     # seasonal_order = (P, D, Q, s) - parametri stagionali
-    order = (1, 1, 1)
+    order = (1, 1, 2)
     seasonal_order = (1, 1, 1, 52)  # stagionalità settimanale (52 settimane)
 
     try:
