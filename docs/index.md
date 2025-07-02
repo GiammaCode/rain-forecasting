@@ -53,7 +53,7 @@ I dati sono stati aggregati su base settimanale e pre-processati per garantire c
 
 - **Frequenza**: settimanale
 - **Unità di misura**: mm di pioggia
-- **Intervallo temporale**: dati storici dal 2019 fino al 2023, previsione per tutto il 2024
+- **Intervallo temporale**: dati storici dal 2014 fino al 2023, previsione per tutto il 2024
 
 ---
 
