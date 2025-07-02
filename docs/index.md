@@ -11,7 +11,7 @@ nav_order: 1
 Questo progetto ha l’obiettivo di analizzare e confrontare diversi modelli di **previsione delle precipitazioni settimanali**
 per l’anno 2024. 
 
-Il problema trattato è una classica **serie temporale univariata**: dati storici di pioggia (in mm) registrati 
+Il problema tratta un **serie temporale**: dati storici di pioggia (in mm) registrati 
 settimanalmente vengono utilizzati per predire i valori futuri.
 
 Il sistema confronta le prestazioni di tre approcci principali:

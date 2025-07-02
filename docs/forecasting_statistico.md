@@ -33,7 +33,7 @@ Dove:
 
 ### 2.1 Configurazione Utilizzata
 ```python
-order = (1, 1, 1)           # Componenti non stagionali
+order = (1, 1, 2)           # Componenti non stagionali
 seasonal_order = (1, 1, 1, 52)  # Componenti stagionali
 ```
 

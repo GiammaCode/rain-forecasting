@@ -114,14 +114,12 @@ def analyze_data(data, label):
     plt.tight_layout()
     plt.show()
 
-def handle_outliers(data, method='iqr', threshold=3):
+def handle_outliers(data):
     """
     Gestisce gli outliers nei dati
 
     Args:
         data (np.array): Serie di dati
-        method (str): Metodo per identificare outliers ('iqr' o 'zscore')
-        threshold (float): Soglia per z-score
 
     Returns:
         np.array: Dati con outliers gestiti
